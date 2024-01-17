@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-// Deploy this contract on Fuji
+// Deploy this contract on Mumbai
 
 import {IRouterClient} from "@chainlink/contracts-ccip/src/v0.8/ccip/interfaces/IRouterClient.sol";
 import {Client} from "@chainlink/contracts-ccip/src/v0.8/ccip/libraries/Client.sol";
@@ -12,7 +12,7 @@ import {LinkTokenInterface} from "@chainlink/contracts/src/v0.8/interfaces/LinkT
  * THIS IS AN EXAMPLE CONTRACT THAT USES UN-AUDITED CODE.
  * DO NOT USE THIS CODE IN PRODUCTION.
  */
-contract CrossSourceMinter {
+contract CrossSourceMinterMumbai {
 
     // Custom errors to provide more descriptive revert messages.
     error NotEnoughBalance(uint256 currentBalance, uint256 calculatedFees); // Used to make sure contract has enough balance to cover the fees.
@@ -31,11 +31,11 @@ contract CrossSourceMinter {
 
         // https://docs.chain.link/ccip/supported-networks/testnet
 
-        // from Fuji
-        address routerAddressFuji = 0xF694E193200268f9a4868e4Aa017A0118C9a8177;
-        router = IRouterClient(routerAddressFuji);
-        linkToken = LinkTokenInterface(0x0b9d5D9136855f6FEc3c0993feE6E9CE8a297846);
-        linkToken.approve(routerAddressFuji, type(uint256).max);
+        // from Mumbai
+        address routerAddressMumbai = 0x1035CabC275068e0F4b745A29CEDf38E13aF41b1;
+        router = IRouterClient(routerAddressMumbai);
+        linkToken = LinkTokenInterface(0x326C977E6efc84E512bB9C30f76E30c160eD06FB);
+        linkToken.approve(routerAddressMumbai, type(uint256).max);
 
         // to Sepolia
         destinationChainSelector = 16015286601757825753;
@@ -43,10 +43,10 @@ contract CrossSourceMinter {
     }
 
     function mintOnSepolia() external {
-        // Mint from Fuji network = chain[1]
+        // Mint from Mumbai network = chain[2]
         Client.EVM2AnyMessage memory message = Client.EVM2AnyMessage({
             receiver: abi.encode(destinationMinter),
-            data: abi.encodeWithSignature("mintFrom(address,uint256)", msg.sender, 1),
+            data: abi.encodeWithSignature("mintFrom(address,uint256)", msg.sender, 2),
             tokenAmounts: new Client.EVMTokenAmount[](0),
             extraArgs: Client._argsToBytes(
                 Client.EVMExtraArgsV1({gasLimit: 980_000})
